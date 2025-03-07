@@ -78,7 +78,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
 
   if (showNextPlayerPrompt && nextPlayer) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center bg-slate-900/95 p-4">
+      <div className="flex flex-col justify-center items-center h-full">
         <div className="space-y-6 w-full max-w-md text-center">
           <div className="space-y-2">
             <h2 className="font-bold text-2xl text-amber-500">
@@ -103,7 +103,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
 
   if (!isReady) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center bg-slate-900 p-4">
+      <div className="">
         <div className="space-y-6 text-center">
           <h2 className="font-bold text-2xl text-amber-500">
             {player.name}, prepárate para seleccionar tu rol
@@ -119,7 +119,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
   }
 
   return (
-    <div className="fixed inset-0 bg-slate-900 p-4 overflow-y-auto">
+    <div className="">
       <div className="mx-auto max-w-4xl">
         <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
           {player.name}, selecciona la carta que te tocó
@@ -132,7 +132,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
             <button
               key={role}
               onClick={() => handleRoleClick(role as Role)}
-              className="flex flex-col items-center bg-slate-800 hover:bg-slate-700 p-4 rounded-lg transform transition-all hover:scale-105"
+              className="flex flex-col items-center bg-slate-800/90 hover:bg-slate-700/90 p-4 rounded-lg transform transition-all hover:scale-105"
             >
               <div className="relative mb-3 w-full aspect-[2/3]">
                 <img src={card.image} alt={card.name} className="shadow-lg rounded-lg w-full h-full object-cover" />
@@ -145,8 +145,8 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
 
         {/* Confirmation Modal */}
         {showConfirmation && selectedRole && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black/70 p-4">
-            <div className="bg-slate-800 p-6 rounded-lg w-full max-w-sm">
+          <div className="fixed inset-0 flex justify-center items-center bg-black/80 backdrop-blur-sm">
+            <div className="bg-slate-800/90 m-4 p-6 rounded-lg w-full max-w-sm">
               <h3 className="mb-4 font-bold text-amber-500 text-xl">Confirmar Selección</h3>
               <div className="flex justify-center items-center mb-4">
                 <img src={CARDS[selectedRole].image} alt={CARDS[selectedRole].name} className="shadow-lg rounded-lg w-32" />

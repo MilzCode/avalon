@@ -133,111 +133,135 @@ const Index = () => {
   }, [holdStartTime]);
 
   return (
-    <div className="bg-slate-900 min-h-screen text-gray-100">
-      <div className="mx-auto px-4 py-8 container">
-        <h1 className="mb-8 font-bold text-4xl text-amber-500 text-center">Avalon</h1>
+    <div className="relative min-h-screen text-gray-100">
+      <div
+        className="z-0 fixed inset-0"
+        style={{
+          backgroundImage: 'url("/background.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: '0.2',
+        }}
+      />
 
-        {error && <div className="bg-red-500/20 mb-6 p-4 border border-red-500 rounded-lg text-center">{error}</div>}
-
-        {phase === 'menu' && (
-          <div className="flex flex-col items-center space-y-6">
-            <p className="max-w-2xl text-center text-gray-300 text-lg">Prepara tu partida de Avalon y minimiza los errores durante la fase de preparación</p>
-            <button onClick={handleStartGame} className="bg-amber-600 hover:bg-amber-700 px-8 py-4 rounded-lg font-bold text-xl transform transition-colors duration-200 hover:scale-105">
-              Iniciar Juego
-            </button>
-          </div>
-        )}
-
-        {phase === 'setup' && <PlayerSetup onBack={() => setPhase('menu')} onConfirm={handlePlayersConfirmed} />}
-
-        {phase === 'gameMode' && (
-          <div className="mx-auto max-w-2xl">
-            <button onClick={() => setPhase('setup')} className="mb-6 text-amber-500 hover:text-amber-400">
-              ← Volver
-            </button>
-
-            <div className="bg-slate-800 shadow-xl p-6 rounded-lg">
-              <h2 className="mb-4 font-bold text-2xl text-amber-500">Selecciona el modo de juego</h2>
-              <p className="mb-6 text-gray-300">Elige el modo de juego que prefieres para esta partida</p>
-
-              <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-                <button onClick={handleGameModeSelected} className="bg-slate-700 hover:bg-slate-600 p-6 rounded-lg text-left transition-colors">
-                  <h3 className="mb-2 font-bold text-amber-500 text-xl">Modo Simple</h3>
-                  <p className="text-gray-300 text-sm">Solo roles básicos: Merlin, Asesino, Leales y Esbirros</p>
-                </button>
-
-                <button disabled className="relative bg-slate-700/50 p-6 rounded-lg text-left cursor-not-allowed overflow-hidden group">
-                  <div className="absolute inset-0 flex justify-center items-center bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="font-bold text-amber-500">Próximamente</span>
-                  </div>
-                  <h3 className="mb-2 font-bold text-amber-500/50 text-xl">Modo Avanzado</h3>
-                  <p className="text-gray-400 text-sm">Incluye roles opcionales: Percival, Morgana, Mordred y Oberón</p>
-                </button>
+      <div className="relative z-10 min-h-screen">
+        <div className="mx-auto px-4 py-8 container">
+          {phase === 'menu' ? (
+            <div className="flex flex-col items-center space-y-8">
+              <div className="mb-4 w-64 h-64">
+                <img src="/coverlogo.jpg" alt="Avalon Logo" className="shadow-2xl rounded-lg w-full h-full object-contain" />
               </div>
+              <h1 className="font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
+              <p className="max-w-2xl text-center text-gray-300 text-lg">Prepara tu partida de Avalon y minimiza los errores durante la fase de preparación</p>
+              <button onClick={handleStartGame} className="bg-amber-600 hover:bg-amber-700 px-8 py-4 rounded-lg font-bold text-xl transform transition-all duration-200 hover:scale-105 shadow-lg">
+                Iniciar Juego
+              </button>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="relative">
+              <h1 className="drop-shadow-lg mb-8 font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
 
-        {phase === 'roleSelection' && players[currentPlayerIndex] && (
-          <RoleSelection
-            player={players[currentPlayerIndex]}
-            onRoleSelected={handleRoleSelected}
-            nextPlayer={currentPlayerIndex < players.length - 1 ? players[currentPlayerIndex + 1] : null}
-            currentPlayerNumber={currentPlayerIndex + 1}
-            totalPlayers={players.length}
-          />
-        )}
+              {error && <div className="bg-red-500/20 mb-6 p-4 border border-red-500 rounded-lg text-center">{error}</div>}
 
-        {phase === 'information' && players[currentPlayerIndex] && (
-          <div className="bg-slate-800 shadow-xl mx-auto p-6 rounded-lg max-w-2xl">
-            <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
-              {players[currentPlayerIndex].name}, revisa tu información
-              <div className="mt-1 text-gray-400 text-sm">
-                ({currentPlayerIndex + 1} de {players.length} jugadores)
-              </div>
-            </h2>
-
-            <div className="space-y-6">
-              <div className="bg-slate-700 p-6 rounded-lg">
-                {isInfoVisible ? (
-                  <>
-                    <p className="mb-4 font-bold text-xl">
-                      Tu rol es: <span className="text-amber-500">{CARDS[players[currentPlayerIndex].role].name}</span>
-                    </p>
-                    <p className="mb-2 text-gray-400">
-                      Perteneces al equipo del <span className="font-bold">{CARDS[players[currentPlayerIndex].role].team === 'good' ? 'Bien' : 'Mal'}</span>
-                    </p>
-                    {getPlayerInformation(players[currentPlayerIndex], players).map((info, i) => (
-                      <p key={i} className="mt-2 text-gray-300">
-                        {info}
-                      </p>
-                    ))}
-                  </>
-                ) : (
-                  <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
-                )}
-              </div>
-
-              <div className="space-y-4 text-center">
-                <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} progress={progress} />
-                <div className="space-y-1">
-                  <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para {currentPlayerIndex < players.length - 1 ? 'pasar al siguiente jugador' : 'finalizar'}</p>
-                  <p className="text-gray-500 text-xs">{Math.floor(progress / 33) + 1}/3 segundos...</p>
+              {phase === 'setup' && (
+                <div className="relative">
+                  <PlayerSetup onBack={() => setPhase('menu')} onConfirm={handlePlayersConfirmed} />
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {phase === 'reveal' && (
-          <div className="bg-slate-800 shadow-xl mx-auto p-6 rounded-lg max-w-2xl">
-            <h2 className="mb-4 font-bold text-2xl text-amber-500">¡El juego puede comenzar!</h2>
-            <p className="mb-6 text-gray-300">Todos los jugadores han visto su información. ¡Que gane el mejor equipo!</p>
-            <button onClick={() => setPhase('menu')} className="bg-amber-600 hover:bg-amber-700 px-6 py-3 rounded-lg">
-              Volver al inicio
-            </button>
-          </div>
-        )}
+              {phase === 'gameMode' && (
+                <div className="mx-auto max-w-2xl">
+                  <button onClick={() => setPhase('setup')} className="mb-6 text-amber-500 hover:text-amber-400">
+                    ← Volver
+                  </button>
+
+                  <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm p-6 rounded-lg">
+                    <h2 className="mb-4 font-bold text-2xl text-amber-500">Selecciona el modo de juego</h2>
+                    <p className="mb-6 text-gray-300">Elige el modo de juego que prefieres para esta partida</p>
+
+                    <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+                      <button onClick={handleGameModeSelected} className="bg-slate-700 hover:bg-slate-600 p-6 rounded-lg text-left transition-colors">
+                        <h3 className="mb-2 font-bold text-amber-500 text-xl">Modo Simple</h3>
+                        <p className="text-gray-300 text-sm">Solo roles básicos: Merlin, Asesino, Leales y Esbirros</p>
+                      </button>
+
+                      <button disabled className="relative bg-slate-700/50 p-6 rounded-lg text-left cursor-not-allowed overflow-hidden group">
+                        <div className="absolute inset-0 flex justify-center items-center bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="font-bold text-amber-500">Próximamente</span>
+                        </div>
+                        <h3 className="mb-2 font-bold text-amber-500/50 text-xl">Modo Avanzado</h3>
+                        <p className="text-gray-400 text-sm">Incluye roles opcionales: Percival, Morgana, Mordred y Oberón</p>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {phase === 'roleSelection' && players[currentPlayerIndex] && (
+                <div className="relative">
+                  <RoleSelection
+                    player={players[currentPlayerIndex]}
+                    onRoleSelected={handleRoleSelected}
+                    nextPlayer={currentPlayerIndex < players.length - 1 ? players[currentPlayerIndex + 1] : null}
+                    currentPlayerNumber={currentPlayerIndex + 1}
+                    totalPlayers={players.length}
+                  />
+                </div>
+              )}
+
+              {phase === 'information' && players[currentPlayerIndex] && (
+                <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm mx-auto p-6 rounded-lg max-w-2xl">
+                  <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
+                    {players[currentPlayerIndex].name}, revisa tu información
+                    <div className="mt-1 text-gray-400 text-sm">
+                      ({currentPlayerIndex + 1} de {players.length} jugadores)
+                    </div>
+                  </h2>
+
+                  <div className="space-y-6">
+                    <div className="bg-slate-700 p-6 rounded-lg">
+                      {isInfoVisible ? (
+                        <>
+                          <p className="mb-4 font-bold text-xl">
+                            Tu rol es: <span className="text-amber-500">{CARDS[players[currentPlayerIndex].role].name}</span>
+                          </p>
+                          <p className="mb-2 text-gray-400">
+                            Perteneces al equipo del <span className="font-bold">{CARDS[players[currentPlayerIndex].role].team === 'good' ? 'Bien' : 'Mal'}</span>
+                          </p>
+                          {getPlayerInformation(players[currentPlayerIndex], players).map((info, i) => (
+                            <p key={i} className="mt-2 text-gray-300">
+                              {info}
+                            </p>
+                          ))}
+                        </>
+                      ) : (
+                        <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-4 text-center">
+                      <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} progress={progress} />
+                      <div className="space-y-1">
+                        <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para {currentPlayerIndex < players.length - 1 ? 'pasar al siguiente jugador' : 'finalizar'}</p>
+                        <p className="text-gray-500 text-xs">{Math.floor(progress / 33) + 1}/3 segundos...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {phase === 'reveal' && (
+                <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm mx-auto p-6 rounded-lg max-w-2xl">
+                  <h2 className="mb-4 font-bold text-2xl text-amber-500">¡El juego puede comenzar!</h2>
+                  <p className="mb-6 text-gray-300">Todos los jugadores han visto su información. ¡Que gane el mejor equipo!</p>
+                  <button onClick={() => setPhase('menu')} className="bg-amber-600 hover:bg-amber-700 px-6 py-3 rounded-lg">
+                    Volver al inicio
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

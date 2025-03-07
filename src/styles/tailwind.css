@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-slate-900;
+  }
+  
+  body {
+    @apply bg-slate-900 min-h-screen;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
