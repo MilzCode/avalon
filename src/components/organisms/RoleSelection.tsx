@@ -82,12 +82,12 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
         <div className="space-y-6 w-full max-w-md text-center">
           <div className="space-y-2">
             <h2 className="font-bold text-2xl text-amber-500">
-              Entrega el celular a
+              Entrega el celular a&nbsp;
               <div className="mt-1 text-gray-400 text-sm">
                 ({currentPlayerNumber} de {totalPlayers} jugadores listos)
               </div>
             </h2>
-            <p className="font-bold text-4xl text-white">{nextPlayer.name}</p>
+            <p className="font-bold text-4xl text-white">{nextPlayer.name.toUpperCase()}</p>
           </div>
 
           <HoldButton onHoldStart={handleTouchStart} onHoldEnd={handleTouchEnd} progress={progress} />
@@ -106,7 +106,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
       <div className="">
         <div className="space-y-6 text-center">
           <h2 className="font-bold text-2xl text-amber-500">
-            {player.name}, prepárate para seleccionar tu rol
+            {player.name.toUpperCase()}, prepárate para seleccionar tu rol
             <div className="mt-1 text-gray-400 text-sm">
               ({currentPlayerNumber} de {totalPlayers} jugadores listos)
             </div>
@@ -122,7 +122,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
     <div className="">
       <div className="mx-auto max-w-4xl">
         <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
-          {player.name}, selecciona la carta que te tocó
+          {player.name.toUpperCase()}, selecciona la carta que te tocó
           <div className="mt-1 text-gray-400 text-sm">
             ({currentPlayerNumber} de {totalPlayers} jugadores listos)
           </div>

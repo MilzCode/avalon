@@ -278,7 +278,7 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
 
   const addPlayer = () => {
     if (newPlayer.trim() && players.length < 10) {
-      setPlayers([...players, newPlayer.trim()]);
+      setPlayers([...players, newPlayer.trim().toUpperCase()]);
       setNewPlayer('');
     }
   };
