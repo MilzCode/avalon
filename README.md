@@ -6,9 +6,9 @@ La app hará lo siguiente:
 
 1. Menu que de momento solo tendrá un boton para iniciar el juego (local), y en el futuro se hará una implementación con websocket para preparar la partida donde cada jugador verá en su celular lo que le corresponda.
 ## modo local
-1. Ingreso de jugadores: Se ingresan los nombres de los jugadores en el orden en que estan sentados izquierda a derecha (mínimo 5, máximo 10).
+1. Ingreso de jugadores: Se ingresan los nombres de los jugadores en el orden en que estan sentados izquierda a derecha (mínimo 5, máximo 10), los jugadores previamente ya han repartido sus cartas de personaje fisicamente.
 2. Modo de juego: (simple: sin personajes opcionales [solo asesino y merli], avanzado: con personajes es opcionales).
-3. Luego luego la app solicita que se pase el celular a un jugador aleatorio para que pueda seleccionar la tarjeta que le corresponde, para evitar mistakes al momento de entregar el celular la app dira el nombre del jugador y dirá manten presionado 3 segundos para iniciar (y vibrará cada segundo).
+3. Luego luego la app solicita que se pase el celular a un jugador aleatorio para que pueda seleccionar la tarjeta que le corresponde y la tiene fisicamente asignada, para evitar mistakes al momento de entregar el celular la app dira el nombre del jugador y dirá manten presionado 3 segundos para iniciar (y vibrará cada segundo).
 4. El jugador ingresa su carta y pone finalizar, luego se pasa el celular al siguiente jugador.
 5. Una vez que todos los jugadores hayan ingresado su carta, la app mostrará un mensaje de que se ha completado la identificación de roles y procederá a solicitar que se entregue el celular a un jugador y mostrará la información que le corresponda según su rol.
 6. cada jugador tendrá el celular para evitar sospechas de quien es quien.
