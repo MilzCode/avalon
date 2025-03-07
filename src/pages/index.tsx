@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RoleSelection } from '@/components/organisms/RoleSelection';
+import { HoldButton } from '@/components/atoms/HoldButton';
 import type { Player, Role } from '@/types/game';
 import { TEAM_DISTRIBUTION, CARDS } from '@/types/game';
 
@@ -12,6 +13,7 @@ const Index = () => {
   const [error, setError] = useState<string | null>(null);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [holdStartTime, setHoldStartTime] = useState<number | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleStartGame = () => {
     setPhase('setup');
@@ -96,8 +98,8 @@ const Index = () => {
     setHoldStartTime(null);
     setIsInfoVisible(false);
 
-    // Only advance if held for at least 1 second
-    if (holdStartTime && Date.now() - holdStartTime >= 1000) {
+    // Only advance if held for at least 3 seconds
+    if (holdStartTime && Date.now() - holdStartTime >= 3000) {
       if (currentPlayerIndex < players.length - 1) {
         setCurrentPlayerIndex(currentPlayerIndex + 1);
         navigator.vibrate?.(200);
@@ -107,6 +109,28 @@ const Index = () => {
       }
     }
   };
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    if (holdStartTime) {
+      intervalId = setInterval(() => {
+        const holdDuration = Date.now() - holdStartTime;
+        const newProgress = Math.min((holdDuration / 3000) * 100, 100);
+        setProgress(newProgress);
+
+        if (holdDuration >= 1000 && holdDuration < 1100) {
+          navigator.vibrate?.(100);
+        } else if (holdDuration >= 2000 && holdDuration < 2100) {
+          navigator.vibrate?.(100);
+        }
+      }, 16);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [holdStartTime]);
 
   return (
     <div className="bg-slate-900 min-h-screen text-gray-100">
@@ -166,34 +190,42 @@ const Index = () => {
 
         {phase === 'information' && players[currentPlayerIndex] && (
           <div className="bg-slate-800 shadow-xl mx-auto p-6 rounded-lg max-w-2xl">
-            <h2 className="mb-6 font-bold text-2xl text-amber-500">{players[currentPlayerIndex].name}, mantén presionado para ver tu información</h2>
-            <div
-              onTouchStart={handleHoldStart}
-              onTouchEnd={handleHoldEnd}
-              onMouseDown={handleHoldStart}
-              onMouseUp={handleHoldEnd}
-              onMouseLeave={handleHoldEnd}
-              className="bg-slate-700 p-6 rounded-lg w-full text-left cursor-pointer select-none"
-            >
-              {isInfoVisible ? (
-                <>
-                  <p className="mb-4 font-bold text-xl">
-                    Tu rol es: <span className="text-amber-500">{CARDS[players[currentPlayerIndex].role].name}</span>
-                  </p>
-                  <p className="mb-2 text-gray-400">
-                    Perteneces al equipo del <span className="font-bold">{CARDS[players[currentPlayerIndex].role].team === 'good' ? 'Bien' : 'Mal'}</span>
-                  </p>
-                  {getPlayerInformation(players[currentPlayerIndex], players).map((info, i) => (
-                    <p key={i} className="mt-2 text-gray-300">
-                      {info}
+            <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
+              {players[currentPlayerIndex].name}, revisa tu información
+              <div className="mt-1 text-gray-400 text-sm">
+                ({currentPlayerIndex + 1} de {players.length} jugadores)
+              </div>
+            </h2>
+
+            <div className="space-y-6">
+              <div className="bg-slate-700 p-6 rounded-lg">
+                {isInfoVisible ? (
+                  <>
+                    <p className="mb-4 font-bold text-xl">
+                      Tu rol es: <span className="text-amber-500">{CARDS[players[currentPlayerIndex].role].name}</span>
                     </p>
-                  ))}
-                </>
-              ) : (
-                <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
-              )}
+                    <p className="mb-2 text-gray-400">
+                      Perteneces al equipo del <span className="font-bold">{CARDS[players[currentPlayerIndex].role].team === 'good' ? 'Bien' : 'Mal'}</span>
+                    </p>
+                    {getPlayerInformation(players[currentPlayerIndex], players).map((info, i) => (
+                      <p key={i} className="mt-2 text-gray-300">
+                        {info}
+                      </p>
+                    ))}
+                  </>
+                ) : (
+                  <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
+                )}
+              </div>
+
+              <div className="space-y-4 text-center">
+                <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} progress={progress} />
+                <div className="space-y-1">
+                  <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para {currentPlayerIndex < players.length - 1 ? 'pasar al siguiente jugador' : 'finalizar'}</p>
+                  <p className="text-gray-500 text-xs">{Math.floor(progress / 33) + 1}/3 segundos...</p>
+                </div>
+              </div>
             </div>
-            <p className="mt-4 text-center text-gray-400 text-sm">Suelta para continuar con el siguiente jugador</p>
           </div>
         )}
 

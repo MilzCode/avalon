@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Player, Role } from '@/types/game';
 import { CARDS } from '@/types/game';
+import { HoldButton } from '@/components/atoms/HoldButton';
 
 interface Props {
   player: Player;
@@ -89,23 +90,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
             <p className="font-bold text-4xl text-white">{nextPlayer.name}</p>
           </div>
 
-          <button
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleTouchStart}
-            onMouseUp={handleTouchEnd}
-            onMouseLeave={handleTouchEnd}
-            className="relative flex justify-center items-center bg-amber-600 hover:bg-amber-700 mx-auto rounded-full w-48 h-48 font-bold text-xl overflow-hidden"
-          >
-            <div
-              className="absolute inset-0 bg-amber-500 origin-bottom"
-              style={{
-                transform: `scaleY(${progress / 100})`,
-                transition: 'transform 16ms linear',
-              }}
-            />
-            <span className="relative">Mantener</span>
-          </button>
+          <HoldButton onHoldStart={handleTouchStart} onHoldEnd={handleTouchEnd} progress={progress} />
 
           <div className="space-y-1">
             <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para continuar</p>
@@ -127,23 +112,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
             </div>
           </h2>
           <p className="text-gray-300">Mantén presionado durante 3 segundos para continuar</p>
-          <button
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleTouchStart}
-            onMouseUp={handleTouchEnd}
-            onMouseLeave={handleTouchEnd}
-            className="relative flex justify-center items-center bg-amber-600 hover:bg-amber-700 rounded-full w-48 h-48 font-bold text-xl overflow-hidden"
-          >
-            <div
-              className="absolute inset-0 bg-amber-500 origin-bottom"
-              style={{
-                transform: `scaleY(${progress / 100})`,
-                transition: 'transform 16ms linear',
-              }}
-            />
-            <span className="relative">Mantener</span>
-          </button>
+          <HoldButton onHoldStart={handleTouchStart} onHoldEnd={handleTouchEnd} progress={progress} />
         </div>
       </div>
     );
