@@ -38,7 +38,7 @@ D. Todos cierran los puños y los ojos nuevamente.
 
 E. Regresan sus manos y abren sus ojos.
 
-F. Es posible mentir el rol que eres
+F. Es posible mentir el rol que eres durante el juego pero no puedes mentir en la fase de identificación.
 
 # 3. Ronda
 
