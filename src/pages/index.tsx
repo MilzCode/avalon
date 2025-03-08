@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { RoleSelection } from '@/components/organisms/RoleSelection';
-import { HoldButton } from '@/components/atoms/HoldButton';
+import { Button } from '@/components/atoms/Button';
+import { PlayerList } from '@/components/molecules/PlayerList';
+import { GameMode } from '@/components/molecules/GameMode';
+import { GameInformation } from '@/components/molecules/GameInformation';
 import type { Player, Role } from '@/types/game';
 import { TEAM_DISTRIBUTION, CARDS } from '@/types/game';
 
@@ -90,23 +93,29 @@ const Index = () => {
   const handleHoldStart = () => {
     setHoldStartTime(Date.now());
     setError(null);
-    setIsInfoVisible(true);
     navigator.vibrate?.(100);
   };
 
   const handleHoldEnd = () => {
     setHoldStartTime(null);
-    setIsInfoVisible(false);
 
-    // Only advance if held for at least 3 seconds
+    // Only show info and advance if held for at least 3 seconds
     if (holdStartTime && Date.now() - holdStartTime >= 3000) {
-      if (currentPlayerIndex < players.length - 1) {
-        setCurrentPlayerIndex(currentPlayerIndex + 1);
-        navigator.vibrate?.(200);
-      } else {
-        setPhase('reveal');
-        navigator.vibrate?.([200, 100, 200]);
-      }
+      setIsInfoVisible(true);
+      navigator.vibrate?.(200);
+    } else {
+      setIsInfoVisible(false);
+      setProgress(0);
+    }
+  };
+
+  const handleContinue = () => {
+    setIsInfoVisible(false);
+    if (currentPlayerIndex < players.length - 1) {
+      setCurrentPlayerIndex(currentPlayerIndex + 1);
+    } else {
+      setPhase('reveal');
+      navigator.vibrate?.([200, 100, 200]);
     }
   };
 
@@ -133,19 +142,9 @@ const Index = () => {
   }, [holdStartTime]);
 
   return (
-    <div className="relative min-h-screen text-gray-100">
-      <div
-        className="z-0 fixed inset-0"
-        style={{
-          backgroundImage: 'url("/background.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: '0.2',
-        }}
-      />
-
-      <div className="relative z-10 min-h-screen">
-        <div className="mx-auto px-4 py-8 container">
+    <div className="bg-[url('/background.png')] bg-slate-900 bg-cover bg-center bg-fixed min-h-screen">
+      <div className="bg-black/50 backdrop-blur-sm px-4 py-8 min-h-screen">
+        <div className="mx-auto max-w-4xl">
           {phase === 'menu' ? (
             <div className="flex flex-col items-center space-y-8">
               <div className="mb-4 w-64 h-64">
@@ -153,9 +152,9 @@ const Index = () => {
               </div>
               <h1 className="font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
               <p className="max-w-2xl text-center text-gray-300 text-lg">Prepara tu partida de Avalon y minimiza los errores durante la fase de preparación</p>
-              <button onClick={handleStartGame} className="bg-amber-600 hover:bg-amber-700 px-8 py-4 rounded-lg font-bold text-xl transform transition-all duration-200 hover:scale-105 shadow-lg">
+              <Button onClick={handleStartGame} className="px-8 py-4 text-xl">
                 Iniciar Juego
-              </button>
+              </Button>
             </div>
           ) : (
             <div className="relative">
@@ -169,95 +168,30 @@ const Index = () => {
                 </div>
               )}
 
-              {phase === 'gameMode' && (
-                <div className="mx-auto max-w-2xl">
-                  <button onClick={() => setPhase('setup')} className="mb-6 text-amber-500 hover:text-amber-400">
-                    ← Volver
-                  </button>
-
-                  <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm p-6 rounded-lg">
-                    <h2 className="mb-4 font-bold text-2xl text-amber-500">Selecciona el modo de juego</h2>
-                    <p className="mb-6 text-gray-300">Elige el modo de juego que prefieres para esta partida</p>
-
-                    <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-                      <button onClick={handleGameModeSelected} className="bg-slate-700 hover:bg-slate-600 p-6 rounded-lg text-left transition-colors">
-                        <h3 className="mb-2 font-bold text-amber-500 text-xl">Modo Simple</h3>
-                        <p className="text-gray-300 text-sm">Solo roles básicos: Merlin, Asesino, Leales y Esbirros</p>
-                      </button>
-
-                      <button disabled className="relative bg-slate-700/50 p-6 rounded-lg text-left cursor-not-allowed overflow-hidden group">
-                        <div className="absolute inset-0 flex justify-center items-center bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="font-bold text-amber-500">Próximamente</span>
-                        </div>
-                        <h3 className="mb-2 font-bold text-amber-500/50 text-xl">Modo Avanzado</h3>
-                        <p className="text-gray-400 text-sm">Incluye roles opcionales: Percival, Morgana, Mordred y Oberón</p>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {phase === 'gameMode' && <GameMode onModeSelect={handleGameModeSelected} onBack={() => setPhase('setup')} />}
 
               {phase === 'roleSelection' && players[currentPlayerIndex] && (
-                <div className="relative">
-                  <RoleSelection
-                    player={players[currentPlayerIndex]}
-                    onRoleSelected={handleRoleSelected}
-                    nextPlayer={currentPlayerIndex < players.length - 1 ? players[currentPlayerIndex + 1] : null}
-                    currentPlayerNumber={currentPlayerIndex + 1}
-                    totalPlayers={players.length}
-                  />
-                </div>
+                <RoleSelection
+                  player={players[currentPlayerIndex]}
+                  onRoleSelected={handleRoleSelected}
+                  nextPlayer={currentPlayerIndex < players.length - 1 ? players[currentPlayerIndex + 1] : null}
+                  currentPlayerNumber={currentPlayerIndex + 1}
+                  totalPlayers={players.length}
+                />
               )}
 
               {phase === 'information' && players[currentPlayerIndex] && (
-                <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm mx-auto p-6 rounded-lg max-w-2xl">
-                  <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
-                    {players[currentPlayerIndex].name}, revisa tu información
-                    <div className="mt-1 text-gray-400 text-sm">
-                      ({currentPlayerIndex + 1} de {players.length} jugadores)
-                    </div>
-                  </h2>
-
-                  <div className="space-y-6">
-                    <div className="bg-slate-700 p-6 rounded-lg">
-                      {isInfoVisible ? (
-                        <>
-                          <p className="mb-4 font-bold text-xl">
-                            Tu rol es: <span className="text-amber-500">{CARDS[players[currentPlayerIndex].role].name}</span>
-                          </p>
-                          <p className="mb-2 text-gray-400">
-                            Perteneces al equipo del <span className="font-bold">{CARDS[players[currentPlayerIndex].role].team === 'good' ? 'Bien' : 'Mal'}</span>
-                          </p>
-                          {getPlayerInformation(players[currentPlayerIndex], players).map((info, i) => (
-                            <p key={i} className="mt-2 text-gray-300">
-                              {info}
-                            </p>
-                          ))}
-                        </>
-                      ) : (
-                        <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-4 text-center">
-                      <HoldButton onHoldStart={handleHoldStart} onHoldEnd={handleHoldEnd} progress={progress} />
-                      <div className="space-y-1">
-                        <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para {currentPlayerIndex < players.length - 1 ? 'pasar al siguiente jugador' : 'finalizar'}</p>
-                        <p className="text-gray-500 text-xs">{Math.floor(progress / 33) + 1}/3 segundos...</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {phase === 'reveal' && (
-                <div className="bg-slate-800/90 shadow-xl backdrop-blur-sm mx-auto p-6 rounded-lg max-w-2xl">
-                  <h2 className="mb-4 font-bold text-2xl text-amber-500">¡El juego puede comenzar!</h2>
-                  <p className="mb-6 text-gray-300">Todos los jugadores han visto su información. ¡Que gane el mejor equipo!</p>
-                  <button onClick={() => setPhase('menu')} className="bg-amber-600 hover:bg-amber-700 px-6 py-3 rounded-lg">
-                    Volver al inicio
-                  </button>
-                </div>
+                <GameInformation
+                  player={players[currentPlayerIndex]}
+                  isInfoVisible={isInfoVisible}
+                  progress={progress}
+                  onHoldStart={handleHoldStart}
+                  onHoldEnd={handleHoldEnd}
+                  onContinue={handleContinue}
+                  onFinish={() => setPhase('menu')}
+                  isLastPlayer={currentPlayerIndex === players.length - 1}
+                  playerInformation={getPlayerInformation(players[currentPlayerIndex], players)}
+                />
               )}
             </div>
           )}
@@ -283,19 +217,15 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
     }
   };
 
-  const removePlayer = (index: number) => {
-    setPlayers(players.filter((_, i) => i !== index));
-  };
-
   return (
-    <div className="mx-auto max-w-2xl">
-      <button onClick={onBack} className="mb-6 text-amber-500 hover:text-amber-400">
+    <div className="mx-auto max-w-2xl text-white">
+      <Button variant="secondary" onClick={onBack} className="mb-6">
         ← Volver
-      </button>
+      </Button>
 
       <div className="bg-slate-800 shadow-xl p-6 rounded-lg">
         <h2 className="mb-4 font-bold text-2xl text-amber-500">Ingresa los jugadores</h2>
-        <p className="mb-4 text-gray-400 text-sm">Mínimo 5 jugadores, máximo 10. Ingresa los nombres en el orden en que están sentados (izquierda a derecha)</p>
+        <p className="mb-4 text-gray-400 text-sm">Mínimo 5 jugadores, máximo 10. Ingresa los nombres en el orden en que están sentados</p>
 
         <div className="flex gap-2 mb-4">
           <input
@@ -306,29 +236,18 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
             className="flex-1 bg-slate-700 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
             onKeyPress={(e) => e.key === 'Enter' && addPlayer()}
           />
-          <button onClick={addPlayer} disabled={players.length >= 10} className="bg-amber-600 hover:bg-amber-700 disabled:opacity-50 px-4 py-2 rounded disabled:cursor-not-allowed">
+          <Button onClick={addPlayer} disabled={players.length >= 10}>
             Agregar
-          </button>
+          </Button>
         </div>
 
-        <ul className="space-y-2">
-          {players.map((player, index) => (
-            <li key={index} className="flex justify-between items-center bg-slate-700 px-4 py-2 rounded">
-              <span>
-                {index + 1}. {player}
-              </span>
-              <button onClick={() => removePlayer(index)} className="text-red-400 hover:text-red-300">
-                ✕
-              </button>
-            </li>
-          ))}
-        </ul>
+        <PlayerList players={players} onRemovePlayer={(index) => setPlayers(players.filter((_, i) => i !== index))} />
 
         {players.length > 0 && (
           <div className="mt-6 text-center">
-            <button onClick={() => onConfirm(players)} disabled={players.length < 5} className="bg-amber-600 hover:bg-amber-700 disabled:opacity-50 px-6 py-3 rounded-lg disabled:cursor-not-allowed">
+            <Button onClick={() => onConfirm(players)} disabled={players.length < 5} className="px-6 py-3">
               Continuar ({players.length}/5-10 jugadores)
-            </button>
+            </Button>
           </div>
         )}
       </div>

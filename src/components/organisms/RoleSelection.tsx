@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Player, Role } from '@/types/game';
 import { CARDS } from '@/types/game';
 import { HoldButton } from '@/components/atoms/HoldButton';
+import { Card } from '@/components/atoms/Card';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
 
 interface Props {
   player: Player;
@@ -76,42 +79,17 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
     };
   }, [holdStartTime]);
 
-  if (showNextPlayerPrompt && nextPlayer) {
-    return (
-      <div className="flex flex-col justify-center items-center h-full">
-        <div className="space-y-6 w-full max-w-md text-center">
-          <div className="space-y-2">
-            <h2 className="font-bold text-2xl text-amber-500">
-              Entrega el celular a&nbsp;
-              <div className="mt-1 text-gray-400 text-sm">
-                ({currentPlayerNumber} de {totalPlayers} jugadores listos)
-              </div>
-            </h2>
-            <p className="font-bold text-4xl text-white">{nextPlayer.name.toUpperCase()}</p>
-          </div>
-
-          <HoldButton onHoldStart={handleTouchStart} onHoldEnd={handleTouchEnd} progress={progress} />
-
-          <div className="space-y-1">
-            <p className="text-gray-400 text-sm">Mantén presionado durante 3 segundos para continuar</p>
-            <p className="text-gray-500 text-xs">{Math.floor(progress / 33) + 1}/3 segundos...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (!isReady) {
     return (
-      <div className="">
-        <div className="space-y-6 text-center">
+      <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm">
+        <div className="mx-auto p-6 max-w-lg text-center">
           <h2 className="font-bold text-2xl text-amber-500">
             {player.name.toUpperCase()}, prepárate para seleccionar tu rol
             <div className="mt-1 text-gray-400 text-sm">
               ({currentPlayerNumber} de {totalPlayers} jugadores listos)
             </div>
           </h2>
-          <p className="text-gray-300">Mantén presionado durante 3 segundos para continuar</p>
+          <p className="mb-6 text-gray-300">Mantén presionado durante 3 segundos para continuar</p>
           <HoldButton onHoldStart={handleTouchStart} onHoldEnd={handleTouchEnd} progress={progress} />
         </div>
       </div>
@@ -119,53 +97,57 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
   }
 
   return (
-    <div className="">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
-          {player.name.toUpperCase()}, selecciona la carta que te tocó
-          <div className="mt-1 text-gray-400 text-sm">
-            ({currentPlayerNumber} de {totalPlayers} jugadores listos)
-          </div>
-        </h2>
-        <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
-          {Object.entries(CARDS).map(([role, card]) => (
-            <button
-              key={role}
-              onClick={() => handleRoleClick(role as Role)}
-              className="flex flex-col items-center bg-slate-800/90 hover:bg-slate-700/90 p-4 rounded-lg transform transition-all hover:scale-105"
-            >
-              <div className="relative mb-3 w-full aspect-[2/3]">
-                <img src={card.image} alt={card.name} className="shadow-lg rounded-lg w-full h-full object-cover" />
-              </div>
-              <span className="font-semibold text-amber-500 text-lg">{card.name}</span>
-              <span className="text-gray-400 text-sm">{card.team === 'good' ? 'Bien' : 'Mal'}</span>
-            </button>
-          ))}
+    <div className="mx-auto max-w-4xl">
+      <h2 className="mb-6 font-bold text-2xl text-amber-500 text-center">
+        {player.name.toUpperCase()}, selecciona la carta que te tocó
+        <div className="mt-1 text-gray-400 text-sm">
+          ({currentPlayerNumber} de {totalPlayers} jugadores listos)
         </div>
-
-        {/* Confirmation Modal */}
-        {showConfirmation && selectedRole && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black/80 backdrop-blur-sm">
-            <div className="bg-slate-800/90 m-4 p-6 rounded-lg w-full max-w-sm">
-              <h3 className="mb-4 font-bold text-amber-500 text-xl">Confirmar Selección</h3>
-              <div className="flex justify-center items-center mb-4">
-                <img src={CARDS[selectedRole].image} alt={CARDS[selectedRole].name} className="shadow-lg rounded-lg w-32" />
-              </div>
-              <p className="mb-6 text-center">
-                ¿Confirmas que tu rol es <span className="font-bold text-amber-500">{CARDS[selectedRole].name}</span>?
-              </p>
-              <div className="flex gap-3">
-                <button onClick={handleCancel} className="flex-1 bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded">
-                  Cancelar
-                </button>
-                <button onClick={handleConfirm} className="flex-1 bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded">
-                  Confirmar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+      </h2>
+      <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
+        {Object.entries(CARDS).map(([role, card]) => (
+          <Card key={role} image={card.image} name={card.name} team={card.team} onClick={() => handleRoleClick(role as Role)} />
+        ))}
       </div>
+
+      {showConfirmation && selectedRole && (
+        <Modal
+          title="Confirmar Selección"
+          onClose={() => setShowConfirmation(false)}
+          actions={
+            <>
+              <Button variant="primary" onClick={handleConfirm}>
+                Confirmar
+              </Button>
+              <Button variant="secondary" onClick={handleCancel}>
+                Cancelar
+              </Button>
+            </>
+          }
+        >
+          <div className="flex justify-center mb-4">
+            <img src={CARDS[selectedRole].image} alt={CARDS[selectedRole].name} className="shadow-lg rounded-lg w-32" />
+          </div>
+          <p className="text-center text-white">
+            ¿Estás seguro que quieres ser <span className="text-amber-500">{CARDS[selectedRole].name}</span>?
+          </p>
+        </Modal>
+      )}
+
+      {showNextPlayerPrompt && nextPlayer && (
+        <Modal
+          title="Siguiente Jugador"
+          actions={
+            <Button variant="primary" onClick={() => setShowNextPlayerPrompt(false)}>
+              Entendido
+            </Button>
+          }
+        >
+          <p className="text-center">
+            Pásale el dispositivo a <span className="text-amber-500">{nextPlayer.name}</span>
+          </p>
+        </Modal>
+      )}
     </div>
   );
 };
