@@ -128,7 +128,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
             <img src={CARDS[selectedRole].image} alt={CARDS[selectedRole].name} className="shadow-lg rounded-lg w-32" />
           </div>
           <p className="text-center text-white">
-            ¿Estás seguro que quieres ser <span className="text-amber-500">{CARDS[selectedRole].name}</span>?
+            ¿Estás seguro que tu carta es <span className="text-amber-500">{CARDS[selectedRole].name}</span>?
           </p>
         </Modal>
       )}
