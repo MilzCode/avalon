@@ -227,7 +227,7 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
         <h2 className="mb-4 font-bold text-2xl text-amber-500">Ingresa los jugadores</h2>
         <p className="mb-4 text-gray-400 text-sm">Mínimo 5 jugadores, máximo 10. Ingresa los nombres en el orden en que están sentados</p>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
           <input
             type="text"
             value={newPlayer}
