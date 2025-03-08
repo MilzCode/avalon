@@ -54,7 +54,7 @@ export const CARDS: CardsObject = {
     name: "Leal",
     image: "/cards/loyal1.png",
     team: "good",
-    desc: "No tiene habilidades especiales.",
+    desc: "Del bando del Bien.",
     knows: [],
   },
   minion: {
@@ -74,7 +74,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     name: "Percival",
     image: "/cards/percival.png",
     team: "good",
-    desc: "Ve a Merlín y Morgana, pero no sabe cuál es cuál.",
+    desc: "Ve a Merlín (Bien) y Morgana (Mal), pero no sabe cuál es cuál.",
     balance: +1,
     knows: ["merlin", "morgana"], // ✅ Percival ve dos personas pero no sabe quién es quién
     needs: ["morgana"] // ✅ Percival solo tiene sentido si Morgana está en juego
@@ -84,7 +84,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     name: "Morgana",
     image: "/cards/morgana.png",
     team: "evil",
-    desc: "Conoce a los malvados. Se hace pasar por Merlín ante Percival.",
+    desc: "Conoce a los malvados. Se hace pasar por Merlín (Bien) ante Percival (Bien).",
     balance: 0,
     knows: ["assassin", "minion", "mordred"], // ✅ NO ve a Oberon
     needs: ["percival"] // ✅ Morgana solo tiene sentido si Percival está en juego
@@ -94,7 +94,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     name: "Mordred",
     image: "/cards/mordred.png",
     team: "evil",
-    desc: "Conoce a los malvados. Merlín no puede verlo como malvado.",
+    desc: "Conoce a los malvados. Merlín (Bien) no puede verlo como malvado.",
     balance: -1,
     knows: ["assassin", "morgana", "minion"], // ✅ NO ve a Oberon, Merlín NO lo ve a él
 

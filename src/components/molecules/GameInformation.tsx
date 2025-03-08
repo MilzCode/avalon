@@ -57,7 +57,7 @@ export const GameInformation = ({ player, isInfoVisible, progress, onHoldStart, 
               <HoldButton onHoldStart={onHoldStart} onHoldEnd={onHoldEnd} progress={progress} />
             ) : (
               <Button onClick={isLastPlayer ? onFinish : onContinue} className="mt-6">
-                {isLastPlayer ? 'Continuar' : 'Continuar'}
+                Continuar
               </Button>
             )}
           </div>

@@ -78,7 +78,7 @@ export const getPlayerInformation = (player: Player, allPlayers: Player[], gameM
     );
     if (otherEvil.length > 0) {
       if (player.role === 'assassin') {
-        info.push('Puedes ganar si descubres quien es merlin.');
+        // info.push('Puedes ganar si descubres quien es merlin.');
         info.push('Tus compañeros malvados son:');
       } else {
         info.push('Tus compañeros malvados son:');
