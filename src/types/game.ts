@@ -46,7 +46,7 @@ export const CARDS: CardsObject = {
     name: "Asesino",
     image: "/cards/assassin.png",
     team: "evil",
-    desc: "Conoce a los malvados. Si descubre a Merlín, los malvados ganan.",
+    desc: "Conoce a los malvados. Si descubre a Merlín al final de la partida, los malvados ganan.",
     knows: ["minion", "morgana"], // ✅ NO ve a Mordred ni a Oberon
   },
   loyal: {
@@ -87,6 +87,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     desc: "Conoce a los malvados. Se hace pasar por Merlín ante Percival.",
     balance: -1,
     knows: ["assassin", "minion", "mordred"], // ✅ NO ve a Oberon
+    needs: ["percival"] // ✅ Morgana solo tiene sentido si Percival está en juego
   },
   mordred: {
     id: "mordred",
@@ -96,6 +97,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     desc: "Conoce a los malvados. Merlín no puede verlo como malvado.",
     balance: -1,
     knows: ["assassin", "morgana", "minion"], // ✅ NO ve a Oberon, Merlín NO lo ve a él
+
   },
   oberon: {
     id: "oberon",
@@ -105,5 +107,6 @@ export const OPTIONAL_CARDS: CardsObject = {
     desc: "Es un malvado, pero no conoce a los demás ni ellos a él.",
     balance: +1,
     knows: [], // ✅ Nadie lo ve, y él no ve a nadie
+
   },
 } as const;
