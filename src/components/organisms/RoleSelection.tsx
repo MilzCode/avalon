@@ -113,7 +113,6 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
       {showConfirmation && selectedRole && (
         <Modal
           title="Confirmar Selección"
-          onClose={() => setShowConfirmation(false)}
           actions={
             <>
               <Button variant="primary" onClick={handleConfirm}>
