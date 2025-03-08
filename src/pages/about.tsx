@@ -80,6 +80,121 @@ const About = () => {
                 <li>Oberón no está permitido en partidas de 5 jugadores</li>
               </ul>
             </section>
+
+            <section>
+              <h2 className="mb-4 font-bold text-2xl text-amber-500">Distribución de Jugadores</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-gray-300">
+                  <thead>
+                    <tr className="border-gray-700 border-b">
+                      <th className="px-4 py-2 text-amber-400 text-left">Total Jugadores</th>
+                      <th className="px-4 py-2 text-amber-400 text-left">Buenos</th>
+                      <th className="px-4 py-2 text-amber-400 text-left">Malos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">5</td>
+                      <td className="px-4 py-2">3</td>
+                      <td className="px-4 py-2">2</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">6</td>
+                      <td className="px-4 py-2">4</td>
+                      <td className="px-4 py-2">2</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">7</td>
+                      <td className="px-4 py-2">4</td>
+                      <td className="px-4 py-2">3</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">8</td>
+                      <td className="px-4 py-2">5</td>
+                      <td className="px-4 py-2">3</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">9</td>
+                      <td className="px-4 py-2">6</td>
+                      <td className="px-4 py-2">3</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2">10</td>
+                      <td className="px-4 py-2">6</td>
+                      <td className="px-4 py-2">4</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 text-gray-400 text-sm">* Recuerda: Siempre debe haber un Merlín en el bando del bien y un Asesino en el bando del mal.</p>
+            </section>
+
+            <section>
+              <h2 className="mb-4 font-bold text-2xl text-amber-500">Tamaño del Equipo por Misión</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-gray-300">
+                  <thead>
+                    <tr className="border-gray-700 border-b">
+                      <th className="px-4 py-2 text-amber-400 text-left">Misión</th>
+                      <th className="px-4 py-2 text-amber-400">5p</th>
+                      <th className="px-4 py-2 text-amber-400">6p</th>
+                      <th className="px-4 py-2 text-amber-400">7p</th>
+                      <th className="px-4 py-2 text-amber-400">8p</th>
+                      <th className="px-4 py-2 text-amber-400">9p</th>
+                      <th className="px-4 py-2 text-amber-400">10p</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">1</td>
+                      <td className="px-4 py-2 text-center">2</td>
+                      <td className="px-4 py-2 text-center">2</td>
+                      <td className="px-4 py-2 text-center">2</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">2</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">3</td>
+                      <td className="px-4 py-2 text-center">2</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                    </tr>
+                    <tr className="border-gray-700/50 border-b">
+                      <td className="px-4 py-2">4</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">4*</td>
+                      <td className="px-4 py-2 text-center">5*</td>
+                      <td className="px-4 py-2 text-center">5*</td>
+                      <td className="px-4 py-2 text-center">5*</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2">5</td>
+                      <td className="px-4 py-2 text-center">3</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">4</td>
+                      <td className="px-4 py-2 text-center">5</td>
+                      <td className="px-4 py-2 text-center">5</td>
+                      <td className="px-4 py-2 text-center">5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 text-gray-400 text-sm">* En la cuarta misión con 7 o más jugadores, se necesitan dos fallos para que la misión fracase.</p>
+            </section>
           </div>
         </div>
       </div>
