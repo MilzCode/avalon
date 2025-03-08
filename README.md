@@ -94,23 +94,25 @@ estas cartas en cualquier combinación que os apetezca; algunas incrementarán l
 Nuestra recomendación es ir paso a paso e introducir cada vez un personaje nuevo para luego cambiarlos o añadir más
 cuando ya estéis familiarizados con cada uno. En la mayoría de casos decidiréis jugar con Merlín, pero no es necesario.
 
-## Perceval. Perceval es un personaje opcional en el lado del bien. Su habilidad especial es que sabe quién es Merlín
+## Perceval. 
+Perceval es un personaje opcional en el lado del bien. Su habilidad especial es que sabe quién es Merlín
 desde el principio de la partida. Usar sabiamente esta habilidad es clave para proteger la identidad de Merlín. Al
 introducir a Perceval en las partidas, el bando del bien es ligeramente más potente y ganará más a menudo.
 ### Nota. Para partidas de cinco jugadores, introducid a Mordred o Morgana si jugáis con Perceval.
 
-## Mordred. Mordred es un personaje opcional en el lado del mal. Su habilidad especial es que no revela su identidad
+## Mordred. 
+Mordred es un personaje opcional en el lado del mal. Su habilidad especial es que no revela su identidad
 a Merlín al principio de la partida. Al introducir a Mordred en las partidas, el bando del mal es ligeramente más
 potente y ganará más a menudo.
 
-## Oberón. Oberón es un personaje opcional en el lado del mal. Su habilidad especial es que no revela su identidad a
+## Oberón. 
+Oberón es un personaje opcional en el lado del mal. Su habilidad especial es que no revela su identidad a
 los demás jugadores del mal ni sabe cuáles son los otros jugadores del mal al principio de la partida («no conoce ni es
 conocido»). Oberón no se considera un esbirro de Mordred y no abre los ojos durante la fase «El mal se revela» al principio
 de la partida. Al introducir a Oberón en las partidas, el bando del bien es ligeramente más potente y ganará más a menudo.
 
-## Morgana. Morgana es un personaje opcional en el lado del mal. Su habilidad especial es que se hace pasar por
-
-## Merlín: se muestra como Merlín a Perceval. Al introducir a Morgana en las partidas, el bando del mal es ligeramente
+## Morgana. 
+Morgana es un personaje opcional en el lado del mal. Su habilidad especial es que se hace pasar por Merlín, se muestra como Merlín a Perceval. Al introducir a Morgana en las partidas, el bando del mal es ligeramente
 más potente y ganará más a menudo.
 
 La fase «El mal se revela» del principio de la partida variará ligeramente en función de qué personajes se añadan. A

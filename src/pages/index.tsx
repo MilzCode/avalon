@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { PlayerList } from '@/components/molecules/PlayerList';
 import { GameMode } from '@/components/molecules/GameMode';
 import { GameInformation } from '@/components/molecules/GameInformation';
+import { Modal } from '@/components/molecules/Modal';
 import type { Player, Role } from '@/types/game';
 import { TEAM_DISTRIBUTION, CARDS } from '@/types/game';
 
@@ -19,6 +20,7 @@ const Index = () => {
   const [isInfoVisible, setIsInfoVisible] = useState(false);
   const [holdStartTime, setHoldStartTime] = useState<number | null>(null);
   const [progress, setProgress] = useState(0);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleStartGame = () => {
     setPhase('setup');
@@ -28,17 +30,29 @@ const Index = () => {
   };
 
   const validateRoles = (players: Player[]) => {
+    let isValid = true;
+    const errors: string[] = [];
+
     const distribution = TEAM_DISTRIBUTION[players.length as keyof typeof TEAM_DISTRIBUTION];
-    if (!distribution) return false;
+    const totalGood = players.filter((p) => CARDS[p.role].team === 'good').length;
+    const totalEvil = players.filter((p) => CARDS[p.role].team === 'evil').length;
+    const totalMerlin = players.filter((p) => p.role === 'merlin').length;
+    const totalAssassin = players.filter((p) => p.role === 'assassin').length;
 
-    const roles = players.map((p) => p.role);
-    const goodCount = roles.filter((role) => CARDS[role].team === 'good').length;
-    const evilCount = roles.filter((role) => CARDS[role].team === 'evil').length;
+    if (totalGood !== distribution.good || totalEvil !== distribution.evil) {
+      isValid = false;
+      errors.push(`Alguien se equivocó al seleccionar. Debería haber ${distribution.good} buenos y ${distribution.evil} malos. Actualmente hay ${totalGood} buenos y ${totalEvil} malos.`);
+    }
+    if (totalMerlin !== 1) {
+      isValid = false;
+      errors.push('Alguien seleccionó a Merlín por error.');
+    }
+    if (totalAssassin !== 1) {
+      isValid = false;
+      errors.push('Alguien seleccionó al Asesino por error.');
+    }
 
-    const hasMerlin = roles.includes('merlin');
-    const hasAssassin = roles.includes('assassin');
-
-    return goodCount === distribution.good && evilCount === distribution.evil && hasMerlin && hasAssassin;
+    return { isValid, error: errors.join('\n') };
   };
 
   const handleRoleSelected = (role: Role) => {
@@ -47,17 +61,18 @@ const Index = () => {
     setPlayers(updatedPlayers);
 
     if (currentPlayerIndex < players.length - 1) {
-      // Don't move to next player yet, RoleSelection component will handle the transition
       const nextPlayerIndex = currentPlayerIndex + 1;
       setCurrentPlayerIndex(nextPlayerIndex);
     } else {
-      if (validateRoles(updatedPlayers)) {
+      const validation = validateRoles(updatedPlayers);
+      if (validation.isValid) {
         setPhase('information');
         setCurrentPlayerIndex(0);
       } else {
-        setError('Los roles seleccionados no cumplen con las reglas del juego. Por favor, inténtalo de nuevo.');
+        setError(validation.error);
         setCurrentPlayerIndex(0);
         setPlayers(players.map((p) => ({ ...p, role: 'loyal' as Role })));
+        setShowErrorModal(true);
       }
     }
   };
@@ -174,8 +189,6 @@ const Index = () => {
             <div className="relative">
               <h1 className="drop-shadow-lg mb-8 font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
 
-              {error && <div className="bg-red-500/20 mb-6 p-4 border border-red-500 rounded-lg text-center">{error}</div>}
-
               {phase === 'setup' && (
                 <div className="relative">
                   <PlayerSetup onBack={() => setPhase('menu')} onConfirm={handlePlayersConfirmed} />
@@ -206,6 +219,22 @@ const Index = () => {
                   isLastPlayer={currentPlayerIndex === players.length - 1}
                   playerInformation={getPlayerInformation(players[currentPlayerIndex], players)}
                 />
+              )}
+
+              {showErrorModal && error && (
+                <Modal
+                  title="Error en la Selección de Roles"
+                  actions={
+                    <Button variant="primary" onClick={() => setShowErrorModal(false)}>
+                      Entendido
+                    </Button>
+                  }
+                >
+                  <div className="text-center">
+                    <p className="mb-4 text-white">{error}</p>
+                    <p className="text-gray-400">Los roles se han reiniciado. Por favor, revisen sus cartas, vuelvan a seleccionar sus roles correctamente.</p>
+                  </div>
+                </Modal>
               )}
             </div>
           )}

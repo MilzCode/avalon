@@ -18,16 +18,40 @@ export const TEAM_DISTRIBUTION = {
 
 // For simple mode
 export const CARDS = {
-  merlin: { name: 'Merlin', image: '/cards/merlin.png', team: 'good' },
-  assassin: { name: 'Asesino', image: '/cards/assassin.png', team: 'evil' },
-  loyal: { name: 'Leal', image: '/cards/loyal1.png', team: 'good' },
-  minion: { name: 'Esbirro', image: '/cards/minion1.png', team: 'evil' },
+  merlin: { name: 'Merlin', image: '/cards/merlin.png', team: 'good', desc: 'Conoce a los malvados. Si es descubierto por el asesino los buenos pierden.' },
+  assassin: { name: 'Asesino', image: '/cards/assassin.png', team: 'evil', desc: 'Conoce a los malvados. Si descubre quien es merlin los malos ganan.' },
+  loyal: { name: 'Leal', image: '/cards/loyal1.png', team: 'good', desc: 'No tiene habilidades especiales' },
+  minion: { name: 'Esbirro', image: '/cards/minion1.png', team: 'evil', desc: 'Conoce a los malvados.' },
 } as const;
 
 // Will be used in advanced mode later
 export const OPTIONAL_CARDS = {
-  percival: { name: 'Percival', image: '/cards/percival.png', team: 'good' },
-  morgana: { name: 'Morgana', image: '/cards/morgana.png', team: 'evil' },
-  mordred: { name: 'Mordred', image: '/cards/mordred.png', team: 'evil' },
-  oberon: { name: 'Oberon', image: '/cards/oberon.png', team: 'evil' },
+  percival: {
+    name: "Percival",
+    image: "/cards/percival.png",
+    team: "good",
+    description: "Ve a Merlín y Morgana, pero no sabe cuál es cuál.",
+    balance: { good: 1, evil: 0 }
+  },
+  morgana: {
+    name: "Morgana",
+    image: "/cards/morgana.png",
+    team: "evil",
+    description: "Conoce a los malvados. Se hace pasar por Merlín ante Percival.",
+    balance: { good: 0, evil: 1 }
+  },
+  mordred: {
+    name: "Mordred",
+    image: "/cards/mordred.png",
+    team: "evil",
+    description: "Conoce a los malvados. Merlín no puede verlo como malvado.",
+    balance: { good: 0, evil: 1 }
+  },
+  oberon: {
+    name: "Oberon",
+    image: "/cards/oberon.png",
+    team: "evil",
+    description: "Es un malvado, pero no conoce a los demás ni ellos a él.",
+    balance: { good: 1, evil: 0 }
+  }
 } as const;
