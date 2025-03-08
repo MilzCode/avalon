@@ -126,7 +126,7 @@ const Index = () => {
         <div className="relative mx-auto max-w-4xl">
           {phase === 'menu' ? (
             <div className="flex flex-col items-center space-y-8">
-              <div className="mb-4 w-64 h-64">
+              <div className="mb-4 w-32 md:w-48 h-32 md:h-48">
                 <img src="/coverlogo.jpg" alt="Avalon Logo" className="shadow-2xl rounded-lg w-full h-full object-contain" />
               </div>
               <h1 className="font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
