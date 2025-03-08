@@ -51,18 +51,22 @@ const About = () => {
               <div className="space-y-4 text-gray-300">
                 <div>
                   <h3 className="font-bold text-amber-400">Percival (Bien)</h3>
+                  <p className="text-amber-600 text-xs">Potencia el bando del bien.</p>
                   <p>Ve a Merlín y Morgana, pero no sabe quién es quién. Debe trabajar para proteger a Merlín.</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-amber-400">Morgana (Mal)</h3>
+                  <p className="text-amber-600 text-xs">Requerida con Percival</p>
                   <p>Se hace pasar por Merlín ante Percival. Conoce a los otros malvados excepto Oberón.</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-amber-400">Mordred (Mal)</h3>
+                  <p className="text-amber-600 text-xs">Potencia el bando del mal.</p>
                   <p>Es invisible para Merlín. Conoce a los otros malvados excepto Oberón.</p>
                 </div>
                 <div>
                   <h3 className="font-bold text-amber-400">Oberón (Mal)</h3>
+                  <p className="text-amber-600 text-xs">Potencia el bando del bien.</p>
                   <p>Es malvado pero no conoce ni es conocido por los demás malvados. Juega en solitario.</p>
                 </div>
               </div>

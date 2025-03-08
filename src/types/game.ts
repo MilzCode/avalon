@@ -85,7 +85,7 @@ export const OPTIONAL_CARDS: CardsObject = {
     image: "/cards/morgana.png",
     team: "evil",
     desc: "Conoce a los malvados. Se hace pasar por Merlín ante Percival.",
-    balance: -1,
+    balance: 0,
     knows: ["assassin", "minion", "mordred"], // ✅ NO ve a Oberon
     needs: ["percival"] // ✅ Morgana solo tiene sentido si Percival está en juego
   },
