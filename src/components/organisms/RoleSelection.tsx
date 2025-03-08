@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Player, Role } from '@/types/game';
-import { CARDS } from '@/types/game';
+import type { Player, Role, GameMode } from '@/types/game';
+import { CARDS, OPTIONAL_CARDS } from '@/types/game';
 import { HoldButton } from '@/components/atoms/HoldButton';
 import { Card } from '@/components/atoms/Card';
 import { Modal } from '@/components/molecules/Modal';
@@ -12,15 +12,18 @@ interface Props {
   nextPlayer: Player | null;
   currentPlayerNumber: number;
   totalPlayers: number;
+  gameMode: GameMode;
 }
 
-export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlayerNumber, totalPlayers }: Props) => {
+export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlayerNumber, totalPlayers, gameMode }: Props) => {
   const [holdStartTime, setHoldStartTime] = useState<number | null>(null);
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showNextPlayerPrompt, setShowNextPlayerPrompt] = useState(false);
+
+  const allCards = gameMode === 'advanced' ? { ...CARDS, ...OPTIONAL_CARDS } : CARDS;
 
   const handleTouchStart = useCallback(() => {
     setHoldStartTime(Date.now());
@@ -105,7 +108,7 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
         </div>
       </h2>
       <div className="gap-4 grid grid-cols-2 md:grid-cols-4">
-        {Object.entries(CARDS).map(([role, card]) => (
+        {Object.entries(allCards).map(([role, card]) => (
           <Card key={role} image={card.image} name={card.name} team={card.team} onClick={() => handleRoleClick(role as Role)} />
         ))}
       </div>
@@ -125,10 +128,10 @@ export const RoleSelection = ({ player, onRoleSelected, nextPlayer, currentPlaye
           }
         >
           <div className="flex justify-center mb-4">
-            <img src={CARDS[selectedRole].image} alt={CARDS[selectedRole].name} className="shadow-lg rounded-lg w-32" />
+            <img src={allCards[selectedRole].image} alt={allCards[selectedRole].name} className="shadow-lg rounded-lg w-32" />
           </div>
           <p className="text-center text-white">
-            ¿Estás seguro que tu carta es <span className="text-amber-500">{CARDS[selectedRole].name}</span>?
+            ¿Estás seguro que tu carta es <span className="text-amber-500">{allCards[selectedRole].name}</span>?
           </p>
         </Modal>
       )}

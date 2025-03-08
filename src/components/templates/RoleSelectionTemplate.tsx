@@ -1,7 +1,7 @@
 import { RoleSelection } from '@/components/organisms/RoleSelection';
 import { Modal } from '@/components/molecules/Modal';
 import { Button } from '@/components/atoms/Button';
-import type { Player, Role } from '@/types/game';
+import type { Player, Role, GameMode } from '@/types/game';
 
 interface RoleSelectionTemplateProps {
   currentPlayer: Player;
@@ -12,12 +12,23 @@ interface RoleSelectionTemplateProps {
   error: string | null;
   onRoleSelected: (role: Role) => void;
   onCloseErrorModal: () => void;
+  gameMode: GameMode;
 }
 
-export const RoleSelectionTemplate = ({ currentPlayer, nextPlayer, currentPlayerNumber, totalPlayers, showErrorModal, error, onRoleSelected, onCloseErrorModal }: RoleSelectionTemplateProps) => {
+export const RoleSelectionTemplate = ({
+  currentPlayer,
+  nextPlayer,
+  currentPlayerNumber,
+  totalPlayers,
+  showErrorModal,
+  error,
+  onRoleSelected,
+  onCloseErrorModal,
+  gameMode,
+}: RoleSelectionTemplateProps) => {
   return (
     <>
-      <RoleSelection player={currentPlayer} onRoleSelected={onRoleSelected} nextPlayer={nextPlayer} currentPlayerNumber={currentPlayerNumber} totalPlayers={totalPlayers} />
+      <RoleSelection player={currentPlayer} onRoleSelected={onRoleSelected} nextPlayer={nextPlayer} currentPlayerNumber={currentPlayerNumber} totalPlayers={totalPlayers} gameMode={gameMode} />
 
       {showErrorModal && error && (
         <Modal

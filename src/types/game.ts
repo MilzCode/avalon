@@ -1,4 +1,4 @@
-export type Role = "merlin" | "assassin" | "loyal" | "minion";
+export type Role = "merlin" | "assassin" | "loyal" | "minion" | "percival" | "morgana" | "mordred" | "oberon";
 export type GameMode = "simple" | "advanced";
 
 export interface Player {

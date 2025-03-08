@@ -4,7 +4,7 @@ import { PlayerSetupTemplate } from '@/components/templates/PlayerSetupTemplate'
 import { RoleSelectionTemplate } from '@/components/templates/RoleSelectionTemplate';
 import { GameInformationTemplate } from '@/components/templates/GameInformationTemplate';
 import { GameMode } from '@/components/molecules/GameMode';
-import type { Player, Role } from '@/types/game';
+import type { Player, Role, GameMode as GameModeType } from '@/types/game';
 import { validateRoles, getPlayerInformation } from '@/utils/gameHelpers';
 
 type GamePhase = 'menu' | 'setup' | 'gameMode' | 'roleSelection' | 'reveal' | 'information';
@@ -18,6 +18,7 @@ const Index = () => {
   const [holdStartTime, setHoldStartTime] = useState<number | null>(null);
   const [progress, setProgress] = useState(0);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [gameMode, setGameMode] = useState<GameModeType>('simple');
 
   const handleStartGame = () => {
     setPhase('setup');
@@ -38,7 +39,7 @@ const Index = () => {
     if (currentPlayerIndex < players.length - 1) {
       setCurrentPlayerIndex(currentPlayerIndex + 1);
     } else {
-      const validation = validateRoles(updatedPlayers);
+      const validation = validateRoles(updatedPlayers, gameMode);
       if (validation.isValid) {
         setPhase('information');
         setCurrentPlayerIndex(0);
@@ -59,6 +60,11 @@ const Index = () => {
     }));
     setPlayers(initialPlayers);
     setPhase('gameMode');
+  };
+
+  const handleGameModeSelected = (mode: GameModeType) => {
+    setGameMode(mode);
+    setPhase('roleSelection');
   };
 
   const handleHoldStart = () => {
@@ -118,7 +124,7 @@ const Index = () => {
 
           {phase === 'setup' && <PlayerSetupTemplate onBack={() => setPhase('menu')} onConfirm={handlePlayersConfirmed} />}
 
-          {phase === 'gameMode' && <GameMode onModeSelect={() => setPhase('roleSelection')} onBack={() => setPhase('setup')} />}
+          {phase === 'gameMode' && <GameMode onModeSelect={handleGameModeSelected} onBack={() => setPhase('setup')} />}
 
           {phase === 'roleSelection' && players[currentPlayerIndex] && (
             <RoleSelectionTemplate
@@ -130,6 +136,7 @@ const Index = () => {
               error={error}
               onRoleSelected={handleRoleSelected}
               onCloseErrorModal={() => setShowErrorModal(false)}
+              gameMode={gameMode}
             />
           )}
 
@@ -143,7 +150,8 @@ const Index = () => {
               onContinue={handleContinue}
               onFinish={() => setPhase('menu')}
               isLastPlayer={currentPlayerIndex === players.length - 1}
-              playerInformation={getPlayerInformation(players[currentPlayerIndex], players)}
+              playerInformation={getPlayerInformation(players[currentPlayerIndex], players, gameMode)}
+              gameMode={gameMode}
             />
           )}
         </div>
