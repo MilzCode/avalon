@@ -38,7 +38,7 @@ export const CARDS: CardsObject = {
     name: "Merlín",
     image: "/cards/merlin.png",
     team: "good",
-    desc: "Conoce a los malvados, pero no a Mordred. Si es descubierto por el Asesino, los buenos pierden.",
+    desc: "Conoce a los malvados. Si es descubierto por el Asesino, los buenos pierden.",
     knows: ["assassin", "morgana", "minion"], // ✅ NO ve a Mordred ni a Oberon
   },
   assassin: {
