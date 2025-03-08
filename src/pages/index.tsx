@@ -82,12 +82,22 @@ const Index = () => {
     const info = [];
     if (player.role === 'merlin') {
       const evilPlayers = allPlayers.filter((p) => CARDS[p.role].team === 'evil');
-      info.push('Puedes ver a los siguientes jugadores como malvados:');
+      info.push('Los siguientes son malvados:');
       info.push(...evilPlayers.map((p) => p.name));
     } else if (CARDS[player.role].team === 'evil') {
       const otherEvil = allPlayers.filter((p) => p.index !== player.index && CARDS[p.role].team === 'evil');
       if (otherEvil.length > 0) {
-        info.push('Tus compañeros malvados son:');
+        if (player.role === 'assassin') {
+          info.push(
+            <p>
+              Puedes ganar si descubres quien es merlin.
+              <br />
+              Tus compañeros malvados son:
+            </p>
+          );
+        } else {
+          info.push('Tus compañeros malvados son:');
+        }
         info.push(...otherEvil.map((p) => p.name));
       }
     }

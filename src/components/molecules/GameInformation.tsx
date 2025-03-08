@@ -12,7 +12,7 @@ interface Props {
   onContinue: () => void;
   onFinish?: () => void;
   isLastPlayer?: boolean;
-  playerInformation: string[];
+  playerInformation: (string | JSX.Element)[];
 }
 
 export const GameInformation = ({ player, isInfoVisible, progress, onHoldStart, onHoldEnd, onContinue, onFinish, isLastPlayer, playerInformation }: Props) => (
@@ -29,11 +29,17 @@ export const GameInformation = ({ player, isInfoVisible, progress, onHoldStart, 
               <p className="mb-2 text-gray-400">
                 Perteneces al equipo del <span className="font-bold">{CARDS[player.role].team === 'good' ? 'Bien' : 'Mal'}</span>
               </p>
-              {playerInformation.map((info, i) => (
-                <p key={i} className="mt-2 text-gray-300">
-                  {info}
-                </p>
-              ))}
+              {playerInformation.map((info, i) =>
+                typeof info === 'string' ? (
+                  <p key={i} className="mt-2 text-gray-300">
+                    {info}
+                  </p>
+                ) : (
+                  <div key={i} className="mt-2 text-gray-300">
+                    {info}
+                  </div>
+                )
+              )}
             </>
           ) : (
             <p className="text-center text-gray-400">Mantén presionado para revelar tu información</p>
