@@ -194,8 +194,8 @@ const Index = () => {
             </div>
           )}
         </div>
+        <p className="mt-3 text-center text-gray-500 text-xs">v{packageJson.version}</p>
       </div>
-      <div className="right-2 bottom-2 absolute text-gray-500 text-xs">v{packageJson.version}</div>
     </div>
   );
 };
