@@ -6,7 +6,8 @@ import { GameMode } from '@/components/molecules/GameMode';
 import { GameInformation } from '@/components/molecules/GameInformation';
 import { Modal } from '@/components/molecules/Modal';
 import type { Player, Role } from '@/types/game';
-import { TEAM_DISTRIBUTION, CARDS } from '@/types/game';
+import { validateRoles, getPlayerInformation } from '@/utils/gameHelpers';
+import packageJson from '../../package.json';
 
 type GamePhase = 'menu' | 'setup' | 'gameMode' | 'roleSelection' | 'reveal' | 'information';
 
@@ -29,30 +30,8 @@ const Index = () => {
     setError(null);
   };
 
-  const validateRoles = (players: Player[]) => {
-    let isValid = true;
-    const errors: string[] = [];
-
-    const distribution = TEAM_DISTRIBUTION[players.length as keyof typeof TEAM_DISTRIBUTION];
-    const totalGood = players.filter((p) => CARDS[p.role].team === 'good').length;
-    const totalEvil = players.filter((p) => CARDS[p.role].team === 'evil').length;
-    const totalMerlin = players.filter((p) => p.role === 'merlin').length;
-    const totalAssassin = players.filter((p) => p.role === 'assassin').length;
-
-    if (totalGood !== distribution.good || totalEvil !== distribution.evil) {
-      isValid = false;
-      errors.push(`Alguien se equivocó al seleccionar. Debería haber ${distribution.good} buenos y ${distribution.evil} malos. Actualmente hay ${totalGood} buenos y ${totalEvil} malos.`);
-    }
-    if (totalMerlin !== 1) {
-      isValid = false;
-      errors.push('Alguien seleccionó a Merlín por error.');
-    }
-    if (totalAssassin !== 1) {
-      isValid = false;
-      errors.push('Alguien seleccionó al Asesino por error.');
-    }
-
-    return { isValid, error: errors.join('\n') };
+  const handleViewRules = () => {
+    window.open('/Reglas.pdf', '_blank');
   };
 
   const handleRoleSelected = (role: Role) => {
@@ -84,39 +63,12 @@ const Index = () => {
       index,
     }));
     setPlayers(initialPlayers);
-    // Guardar jugadores en localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(confirmedPlayers));
     setPhase('gameMode');
   };
 
   const handleGameModeSelected = () => {
     setPhase('roleSelection');
-  };
-
-  const getPlayerInformation = (player: Player, allPlayers: Player[]) => {
-    const info = [];
-    if (player.role === 'merlin') {
-      const evilPlayers = allPlayers.filter((p) => CARDS[p.role].team === 'evil');
-      info.push('Los siguientes son malvados:');
-      info.push(...evilPlayers.map((p) => p.name));
-    } else if (CARDS[player.role].team === 'evil') {
-      const otherEvil = allPlayers.filter((p) => p.index !== player.index && CARDS[p.role].team === 'evil');
-      if (otherEvil.length > 0) {
-        if (player.role === 'assassin') {
-          info.push(
-            <p>
-              Puedes ganar si descubres quien es merlin.
-              <br />
-              Tus compañeros malvados son:
-            </p>
-          );
-        } else {
-          info.push('Tus compañeros malvados son:');
-        }
-        info.push(...otherEvil.map((p) => p.name));
-      }
-    }
-    return info;
   };
 
   const handleHoldStart = () => {
@@ -127,8 +79,6 @@ const Index = () => {
 
   const handleHoldEnd = () => {
     setHoldStartTime(null);
-
-    // Only show info and advance if held for at least 3 seconds
     if (holdStartTime && Date.now() - holdStartTime >= 3000) {
       setIsInfoVisible(true);
       navigator.vibrate?.(200);
@@ -173,7 +123,7 @@ const Index = () => {
   return (
     <div className="bg-[url('/background.png')] bg-slate-900 bg-cover bg-center bg-fixed min-h-screen">
       <div className="bg-black/50 backdrop-blur-sm px-4 py-8 min-h-screen">
-        <div className="mx-auto max-w-4xl">
+        <div className="relative mx-auto max-w-4xl">
           {phase === 'menu' ? (
             <div className="flex flex-col items-center space-y-8">
               <div className="mb-4 w-64 h-64">
@@ -181,9 +131,14 @@ const Index = () => {
               </div>
               <h1 className="font-bold text-4xl text-amber-500 text-center">The Resistance: Avalon</h1>
               <p className="max-w-2xl text-center text-gray-300 text-lg">Prepara tu partida de Avalon y minimiza los errores durante la fase de preparación</p>
-              <Button onClick={handleStartGame} className="px-8 py-4 text-xl">
-                Iniciar Juego
-              </Button>
+              <div className="space-y-4">
+                <Button onClick={handleStartGame} className="px-8 py-4 w-full text-xl">
+                  Iniciar Juego
+                </Button>
+                <Button onClick={handleViewRules} variant="secondary" className="px-8 py-4 w-full text-xl">
+                  Ver Reglas
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="relative">
@@ -240,6 +195,7 @@ const Index = () => {
           )}
         </div>
       </div>
+      <div className="right-2 bottom-2 absolute text-gray-500 text-xs">v{packageJson.version}</div>
     </div>
   );
 };
