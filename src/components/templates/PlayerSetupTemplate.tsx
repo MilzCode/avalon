@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { PlayerList } from '@/components/molecules/PlayerList';
 
@@ -15,6 +15,10 @@ export const PlayerSetupTemplate = ({ onBack, onConfirm }: PlayerSetupTemplatePr
     return savedPlayers ? JSON.parse(savedPlayers) : [];
   });
   const [newPlayer, setNewPlayer] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+  }, [players]);
 
   const addPlayer = () => {
     if (newPlayer.trim() && players.length < 10) {
