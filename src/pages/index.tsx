@@ -9,6 +9,8 @@ import { TEAM_DISTRIBUTION, CARDS } from '@/types/game';
 
 type GamePhase = 'menu' | 'setup' | 'gameMode' | 'roleSelection' | 'reveal' | 'information';
 
+const STORAGE_KEY = 'avalon-players';
+
 const Index = () => {
   const [phase, setPhase] = useState<GamePhase>('menu');
   const [players, setPlayers] = useState<Player[]>([]);
@@ -67,6 +69,8 @@ const Index = () => {
       index,
     }));
     setPlayers(initialPlayers);
+    // Guardar jugadores en localStorage
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(confirmedPlayers));
     setPhase('gameMode');
   };
 
@@ -207,7 +211,10 @@ interface PlayerSetupProps {
 }
 
 const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>(() => {
+    const savedPlayers = localStorage.getItem(STORAGE_KEY);
+    return savedPlayers ? JSON.parse(savedPlayers) : [];
+  });
   const [newPlayer, setNewPlayer] = useState('');
 
   const addPlayer = () => {
@@ -217,6 +224,11 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
     }
   };
 
+  const clearPlayers = () => {
+    setPlayers([]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
   return (
     <div className="mx-auto max-w-2xl text-white">
       <Button variant="secondary" onClick={onBack} className="mb-6">
@@ -224,7 +236,14 @@ const PlayerSetup = ({ onBack, onConfirm }: PlayerSetupProps) => {
       </Button>
 
       <div className="bg-slate-800 shadow-xl p-6 rounded-lg">
-        <h2 className="mb-4 font-bold text-2xl text-amber-500">Ingresa los jugadores</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="font-bold text-2xl text-amber-500">Ingresa los jugadores</h2>
+          {players.length > 0 && (
+            <Button variant="secondary" onClick={clearPlayers} className="text-sm">
+              Limpiar lista
+            </Button>
+          )}
+        </div>
         <p className="mb-4 text-gray-400 text-sm">Mínimo 5 jugadores, máximo 10. Ingresa los nombres en el orden en que están sentados</p>
 
         <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
