@@ -1,4 +1,5 @@
 import { Button } from '@/components/atoms/Button';
+import { useNavigate } from 'react-router-dom';
 import packageJson from '../../../package.json';
 
 interface MainMenuProps {
@@ -7,6 +8,8 @@ interface MainMenuProps {
 }
 
 export const MainMenu = ({ onStartGame, onViewRules }: MainMenuProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col items-center space-y-8">
       <div className="mb-4 w-32 md:w-48 lg:w-64 h-32 md:h-48 lg:h-64">
@@ -18,8 +21,11 @@ export const MainMenu = ({ onStartGame, onViewRules }: MainMenuProps) => {
         <Button onClick={onStartGame} className="px-8 py-4 w-full text-xl">
           Iniciar Juego
         </Button>
+        <Button onClick={() => navigate('/about')} variant="secondary" className="px-8 py-4 w-full text-xl">
+          Como usar
+        </Button>
         <Button onClick={onViewRules} variant="secondary" className="px-8 py-4 w-full text-xl">
-          Ver Reglas
+          Ver Reglas de Avalon
         </Button>
       </div>
       <p className="mt-3 text-center text-gray-500 text-xs">v{packageJson.version}</p>
