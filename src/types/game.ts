@@ -51,16 +51,16 @@ export const CARDS: CardsObject = {
   },
   loyal: {
     id: "loyal",
-    name: "Leal",
-    image: "/cards/loyal1.png",
+    name: "Leal (Loyal)",
+    image: "/cards/loyals.png",
     team: "good",
     desc: "Del bando del Bien.",
     knows: [],
   },
   minion: {
     id: "minion",
-    name: "Esbirro",
-    image: "/cards/minion1.png",
+    name: "Esbirro (Minion)",
+    image: "/cards/minions.png",
     team: "evil",
     desc: "Conoce a los demás malvados.",
     knows: ["assassin", "morgana"], // ✅ NO ve a Mordred ni a Oberon
