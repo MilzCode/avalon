@@ -1,3 +1,7 @@
+# Ejemplo desplegado
+
+https://avalon-teal.vercel.app
+
 # Resistencia Avalon
 
 Esta app facilitará la preparación de las partidas de resistencia avalon, permitiendo a los jugadores enfocarse en el juego y no en la preparación y minimizando los errores o trampas al momento de identificar roles.
